@@ -13,6 +13,10 @@ from gensim.models import KeyedVectors
 # http://vene.ro/blog/word-movers-distance-in-python.html
 
 def get_wv(lang, wordvectors, binned=False, wvshape=None):
+    '''
+        Auxiliary function for storing and sorting vocabulary
+    '''
+
     wv = KeyedVectors.load_word2vec_format(wordvectors, binary=binned)
 
     wv.init_sims(replace=False) # l2 normalizing all wvs
@@ -68,6 +72,11 @@ def objdesc(wvvecs, vocablist, objs, desc):
 
 
 def objdescrefs(wvvecs, vocablist, objs, desc, refs):
+    '''
+        Function that computes the score given detected objects, description
+        and reference list
+
+    '''
 
     vocabdict = {w: k for k, w in enumerate(vocablist)}
 
