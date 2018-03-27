@@ -5,7 +5,6 @@ import numpy as np
 from pyemd import emd
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-from nltk.corpus import stopwords
 from sklearn.metrics import euclidean_distances
 from gensim.models import KeyedVectors
 
@@ -44,7 +43,7 @@ def objdesc(wvvecs, vocablist, objs, desc):
 
     vocabdict = {w: k for k, w in enumerate(vocablist)}
 
-    vc = CountVectorizer(stop_words=list(stopwords.words('english'))).fit([objs, desc])
+    vc = CountVectorizer(stop_words='english').fit([objs, desc])
 
     v_obj, v_desc = vc.transform([objs, desc])
 
