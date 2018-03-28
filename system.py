@@ -11,7 +11,7 @@ from gensim.models import KeyedVectors
 # this code is adapted from:
 # http://vene.ro/blog/word-movers-distance-in-python.html
 
-def get_wv(lang, wordvectors, binned=False, wvshape=None):
+def preprocess(wordvectors, binned=False):
     '''
         Auxiliary function for storing and sorting vocabulary
     '''
@@ -22,19 +22,19 @@ def get_wv(lang, wordvectors, binned=False, wvshape=None):
     wvshape = wv.syn0norm.shape
 
     # saving memmapped file and vocab for posterity
-    fp = np.memmap('data/embed_'+lang+'_.dat', dtype=np.double, mode='w+',
+    fp = np.memmap('data/embed.dat', dtype=np.double, mode='w+',
             shape=wv.syn0norm.shape)
     fp[:] = wv.syn0norm[:]
 
-    with open('data/embed_'+lang+'_.vocab', 'w') as f:
+    with open('data/embed.vocab', 'w') as f:
         for _, w in sorted((voc.index, word) for word, voc in
                 wv.vocab.items()):
             print(w, file=f)
     del fp, wv
     # freeing up precious memory
 
-    W = np.memmap('data/embed_'+lang+'_.dat', dtype=np.double, mode='r', shape=wvshape)
-    with open('data/embed_'+lang+'_.vocab') as f:
+    W = np.memmap('data/embed.dat', dtype=np.double, mode='r', shape=wvshape)
+    with open('data/embed.vocab') as f:
         vocab_list = list(map(str.strip, f.readlines()))
 
     return W, vocab_list
