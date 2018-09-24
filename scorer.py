@@ -8,12 +8,29 @@ from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.metrics import euclidean_distances
 from gensim.models import KeyedVectors
 
-# this code is adapted from:
-# http://vene.ro/blog/word-movers-distance-in-python.html
 
 def preprocess(wordvectors, binned=False):
     '''
-        Auxiliary function for storing and sorting vocabulary
+
+    Auxiliary function for storing and sorting vocabulary
+
+    Parameters:
+    ----------
+
+    wordvectors : path to wordvectors file in word2vec format
+    binned : True if wordvectors are in binned format
+
+    Returns:
+    -------
+
+    W : a matrix of wordvectors
+    vocab_list : vocab_list where each item corresponds to the row of W
+
+    Notes
+    -----
+
+    This function also saves W and vocab_list in the data folder.
+
     '''
 
     wv = KeyedVectors.load_word2vec_format(wordvectors, binary=binned)
@@ -22,11 +39,11 @@ def preprocess(wordvectors, binned=False):
     wvshape = wv.syn0norm.shape
 
     # saving memmapped file and vocab for posterity
-    fp = np.memmap('data/embed.dat', dtype=np.double, mode='w+',
+    fp = np.memmap('embed.dat', dtype=np.double, mode='w+',
             shape=wv.syn0norm.shape)
     fp[:] = wv.syn0norm[:]
 
-    with open('data/embed.vocab', 'w') as f:
+    with open('embed.vocab', 'w') as f:
         for _, w in sorted((voc.index, word) for word, voc in
                 wv.vocab.items()):
             print(w, file=f)
