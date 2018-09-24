@@ -40,6 +40,26 @@ def preprocess(wordvectors, binned=False):
     return W, vocab_list
 
 def objdesc(wvvecs, vocablist, objs, desc):
+    '''
+        Function that computes the score given detected objects, description
+        without references. The wvvecs and vocablist refer to the memcached
+        word vectors. Both wvvecs and vocablist can be obtained using the
+        preprocess function.
+
+        Parameters
+        ----------
+        wvvecs : memcached matrix of embeddings
+        vocablist : vocab list of the embeddings
+        objs : detected objects (txt file with one line for all detected
+                objects)
+        desc : description for evaluation (txt file)
+
+        Returns
+        -------
+        score : Vifidel score
+
+    '''
+
 
     vocabdict = {w: k for k, w in enumerate(vocablist)}
 
@@ -73,7 +93,22 @@ def objdesc(wvvecs, vocablist, objs, desc):
 def objdescrefs(wvvecs, vocablist, objs, desc, refs):
     '''
         Function that computes the score given detected objects, description
-        and reference list
+        and reference list. The wvvecs and vocablist refer to the memcached
+        word vectors. Both wvvecs and vocablist can be obtained using the
+        preprocess function.
+
+        Parameters
+        ----------
+        wvvecs : memcached matrix of embeddings
+        vocablist : vocab list of the embeddings
+        objs : detected objects (txt file with one line for all detected
+                objects)
+        desc : description for evaluation (txt file)
+        refs : references (txt file with one refs/line)
+
+        Returns
+        -------
+        score : Vifidel score
 
     '''
 
@@ -90,7 +125,6 @@ def objdescrefs(wvvecs, vocablist, objs, desc, refs):
 
     v_obj = v_obj.toarray().ravel()
     v_desc = v_desc.toarray().ravel()
-
     wvoc = wvvecs[[vocabdict[w] for w in vc.get_feature_names()]]
     weightsn = np.zeros(len(wvoc))
     for r in refs:
